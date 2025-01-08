@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interactive Photo Gallery</title>
+  <style>
+    #image {
+      width: 300px;
+      height: 200px;
+      background-color: lightgray;
+      background-size: cover;
+      background-position: center;
+      text-align: center;
+      line-height: 200px;
+      font-size: 18px;
+      font-family: Arial, sans-serif;
+      margin-bottom: 20px;
+    }
+    .preview {
+      width: 100px;
+      height: 100px;
+      margin: 10px;
+      cursor: pointer;
+      border: 2px solid transparent;
+    }
+    .preview:focus {
+      border-color: blue;
+    }
+  </style>
+</head>
+<body onload="pageLoaded()">
+
+  <h1>Interactive Photo Gallery</h1>
+  <div id="image" tabindex="0">Hover over an image below to display here.</div>
+
+  <div>
+    <figure>
+      <img class="preview" src="https://via.placeholder.com/150/FF0000/FFFFFF?text=Image+1" alt="Red Image" tabindex="0">
+      <figcaption>Red Image</figcaption>
+    </figure>
+    <figure>
+      <img class="preview" src="https://via.placeholder.com/150/00FF00/FFFFFF?text=Image+2" alt="Green Image" tabindex="0">
+      <figcaption>Green Image</figcaption>
+    </figure>
+    <figure>
+      <img class="preview" src="https://via.placeholder.com/150/0000FF/FFFFFF?text=Image+3" alt="Blue Image" tabindex="0">
+      <figcaption>Blue Image</figcaption>
+    </figure>
+    <figure>
+      <img class="preview" src="https://via.placeholder.com/150/FFFF00/FFFFFF?text=Image+4" alt="Yellow Image" tabindex="0">
+      <figcaption>Yellow Image</figcaption>
+    </figure>
+    <figure>
+      <img class="preview" src="https://via.placeholder.com/150/FF00FF/FFFFFF?text=Image+5" alt="Pink Image" tabindex="0">
+      <figcaption>Pink Image</figcaption>
+    </figure>
+    <figure>
+      <img class="preview" src="https://via.placeholder.com/150/000000/FFFFFF?text=Image+6" alt="Black Image" tabindex="0">
+      <figcaption>Black Image</figcaption>
+    </figure>
+  </div>
+
+  <script>
+    // Function to handle image preview update
+    function upDate(previewPic) {
+      const imageDiv = document.getElementById("image");
+      imageDiv.style.backgroundImage = `url(${previewPic.src})`;
+      imageDiv.textContent = previewPic.alt;
+    }
+
+    // Function to reset image and text when mouse leaves
+    function undo() {
+      const imageDiv = document.getElementById("image");
+      imageDiv.style.backgroundImage = "url('')";
+      imageDiv.textContent = "Hover over an image below to display here.";
+    }
+
+    // Function to add tabindex to all images dynamically
+    function addTabIndex() {
+      const previewImages = document.querySelectorAll(".preview");
+      previewImages.forEach((image) => {
+        image.setAttribute("tabindex", "0");
+      });
+    }
+
+    // Handle page load event
+    function pageLoaded() {
+      console.log("Page Loaded");
+
+      // Add tabindex to images on page load
+      addTabIndex();
+
+      // Add event listeners for focus and blur events
+      const previewImages = document.querySelectorAll(".preview");
+      previewImages.forEach((image) => {
+        image.addEventListener("mouseover", function () {
+          upDate(this);
+        });
+        image.addEventListener("mouseout", undo);
+        image.addEventListener("focus", function () {
+          console.log(`Focused on: ${image.alt}`);
+          upDate(this);
+        });
+        image.addEventListener("blur", function () {
+          console.log(`Blurred from: ${image.alt}`);
+          undo();
+        });
+      });
+    }
+
+    // Add event listeners to the images for keyboard and mouse interaction
+    document.querySelectorAll(".preview").forEach((image) => {
+      image.addEventListener("mouseover", function () {
+        upDate(this);
+      });
+      image.addEventListener("mouseout", undo);
+      image.addEventListener("focus", function () {
+        upDate(this);
+      });
+      image.addEventListener("blur", undo);
+    });
+  </script>
+
+</body>
+</html>
